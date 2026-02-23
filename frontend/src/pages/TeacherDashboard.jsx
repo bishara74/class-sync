@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../api/axiosConfig';
 
 export default function TeacherDashboard({ user }) {
     const [courseName, setCourseName] = useState('');
@@ -15,7 +15,7 @@ export default function TeacherDashboard({ user }) {
 
         try {
 
-            const response = await axios.post('http://localhost:8081/api/attendance/sessions', {
+            const response = await api.post('/api/attendance/generate', {
                 teacherId: user.id,
                 courseName: courseName,
                 validForMinutes: validFor

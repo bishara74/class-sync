@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../api/axiosConfig';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage({ onLogin }) {
@@ -17,7 +17,7 @@ export default function LoginPage({ onLogin }) {
 
         try {
             // Send the login request to Spring Boot
-            const response = await axios.post('http://localhost:8081/api/auth/login', {
+            const response = await api.post('/api/attendance/generate', {
                 email: email,
                 password: password,
                 neptunCode: role === 'STUDENT' ? neptunCode : null

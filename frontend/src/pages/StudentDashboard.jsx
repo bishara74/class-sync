@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../api/axiosConfig';
 
 export default function StudentDashboard({ user }) {
     const [code, setCode] = useState('');
@@ -12,7 +12,7 @@ export default function StudentDashboard({ user }) {
         setStatus(null);
 
         try {
-            const response = await axios.post('http://localhost:8081/api/attendance/check-in', {
+            const response = await api.post('/api/attendance/generate', {
                 studentId: user.id,
                 code: code
             });

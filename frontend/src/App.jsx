@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { useState } from 'react';
 import TeacherDashboard from './pages/TeacherDashboard';
 import StudentDashboard from './pages/StudentDashboard';
@@ -12,7 +12,7 @@ function App() {
     };
 
     return (
-        <Router>
+        <HashRouter>
             <div className="min-h-screen bg-gray-50 flex flex-col">
 
                 <nav className="bg-white shadow-sm w-full px-8 py-4 flex justify-between items-center border-b border-gray-200">
@@ -43,7 +43,7 @@ function App() {
                     </Routes>
                 </main>
             </div>
-        </Router>
+        </HashRouter>
     );
 }
 
