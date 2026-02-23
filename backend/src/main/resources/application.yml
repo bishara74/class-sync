@@ -1,0 +1,16 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/classsync
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update # Automatically updates DB schema (good for dev)
+    show-sql: true # Prints SQL queries to the console for debugging
+    properties:
+      hibernate:
+        format_sql: true
