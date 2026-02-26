@@ -2,7 +2,7 @@ stages:
   - build
   - test
 
-# ---- Backend: Build ----
+# Backend: Build
 backend-build:
   stage: build
   image: maven:3.9-eclipse-temurin-17
@@ -14,17 +14,27 @@ backend-build:
       - backend/target/*.jar
     expire_in: 1 hour
 
-# ---- Backend: Test ----
+# Backend: Test
 backend-test:
   stage: test
   image: maven:3.9-eclipse-temurin-17
+  services:
+    - name: postgres:15
+      alias: postgres
+  variables:
+    POSTGRES_DB: classsync
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: password
+    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/classsync
+    SPRING_DATASOURCE_USERNAME: postgres
+    SPRING_DATASOURCE_PASSWORD: password
   script:
     - cd backend
     - mvn test
   needs:
     - backend-build
 
-# ---- Angular Frontend: Build ----
+# Angular Frontend: Build
 angular-build:
   stage: build
   image: node:20-alpine
