@@ -1,0 +1,38 @@
+stages:
+  - build
+  - test
+
+# ---- Backend: Build ----
+backend-build:
+  stage: build
+  image: maven:3.9-eclipse-temurin-17
+  script:
+    - cd backend
+    - mvn clean package -DskipTests
+  artifacts:
+    paths:
+      - backend/target/*.jar
+    expire_in: 1 hour
+
+# ---- Backend: Test ----
+backend-test:
+  stage: test
+  image: maven:3.9-eclipse-temurin-17
+  script:
+    - cd backend
+    - mvn test
+  needs:
+    - backend-build
+
+# ---- Angular Frontend: Build ----
+angular-build:
+  stage: build
+  image: node:20-alpine
+  script:
+    - cd angular-frontend
+    - npm ci
+    - npx ng build --configuration=production
+  artifacts:
+    paths:
+      - angular-frontend/dist/
+    expire_in: 1 hour
