@@ -1,0 +1,18 @@
+<nav class="bg-white shadow-sm w-full px-8 py-4 flex justify-between items-center border-b border-gray-200">
+  <div class="text-2xl font-extrabold text-blue-600 tracking-tight">
+    <a routerLink="/">ClassSync</a>
+  </div>
+
+  @if (authService.currentUser$ | async; as user) {
+    <div class="flex items-center gap-4">
+      <span class="text-gray-700 font-medium">
+        Hello, <span class="font-bold">{{ user.name }}</span>
+      </span>
+      <button
+        (click)="logout()"
+        class="px-4 py-2 text-sm bg-red-50 text-red-600 font-bold rounded-md hover:bg-red-100 transition">
+        Logout
+      </button>
+    </div>
+  }
+</nav>

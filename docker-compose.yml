@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   db:
     image: postgres:15
@@ -9,9 +8,29 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: classsync
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: classsync-backend
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/classsync
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - db
+
+  angular-frontend:
+    build: ./angular-frontend
+    container_name: classsync-angular
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:

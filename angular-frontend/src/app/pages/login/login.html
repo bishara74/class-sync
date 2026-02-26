@@ -1,0 +1,66 @@
+<div class="p-8 bg-white rounded-xl shadow-lg w-full max-w-md mt-12 border border-gray-100">
+  <h2 class="text-3xl font-extrabold mb-6 text-gray-800 text-center">Welcome Back</h2>
+
+  <div class="flex gap-2 mb-6 bg-gray-100 p-1 rounded-lg">
+    <button
+      type="button"
+      (click)="selectRole('STUDENT')"
+      [class]="role === 'STUDENT'
+        ? 'w-full py-2 rounded-md font-bold text-sm transition bg-white text-blue-600 shadow-sm'
+        : 'w-full py-2 rounded-md font-bold text-sm transition text-gray-500 hover:text-gray-700'">
+      Student
+    </button>
+    <button
+      type="button"
+      (click)="selectRole('TEACHER')"
+      [class]="role === 'TEACHER'
+        ? 'w-full py-2 rounded-md font-bold text-sm transition bg-white text-blue-600 shadow-sm'
+        : 'w-full py-2 rounded-md font-bold text-sm transition text-gray-500 hover:text-gray-700'">
+      Teacher
+    </button>
+  </div>
+
+  <form (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+    <div>
+      <label class="block text-sm font-bold text-gray-700 mb-1">Email</label>
+      <input
+        type="email"
+        required
+        [(ngModel)]="email"
+        name="email"
+        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+
+    <div>
+      <label class="block text-sm font-bold text-gray-700 mb-1">Password</label>
+      <input
+        type="password"
+        required
+        [(ngModel)]="password"
+        name="password"
+        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+
+    @if (role === 'STUDENT') {
+      <div>
+        <label class="block text-sm font-bold text-gray-700 mb-1">Neptun Code</label>
+        <input
+          type="text"
+          required
+          [(ngModel)]="neptunCode"
+          name="neptunCode"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase" />
+      </div>
+    }
+
+    @if (error) {
+      <p class="text-red-500 text-sm font-semibold text-center mt-2">{{ error }}</p>
+    }
+
+    <button
+      type="submit"
+      class="mt-4 w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition shadow-md">
+      Sign In
+    </button>
+  </form>
+</div>
