@@ -7,7 +7,7 @@
 - **Frontend (primary):** Angular 21 + TypeScript + Tailwind CSS
 - **Frontend (legacy):** React 19 + Vite + Axios (in `frontend/` directory)
 - **Database:** PostgreSQL 15
-- **DevOps:** Docker + Docker Compose, GitLab CI/CD, Nginx reverse proxy
+- **DevOps:** Docker + Docker Compose, GitLab CI/CD, Nginx reverse proxy, AWS EC2 deployment (systemd + Nginx)
 
 ### Key Structure
 ```
@@ -27,6 +27,13 @@ class-sync/
 │       ├── models/           # TypeScript interfaces matching backend DTOs
 │       └── guards/           # authGuard + roleGuard
 ├── frontend/                 # Legacy React frontend
+├── deployment/
+│   └── ec2/                  # AWS EC2 deployment configs
+│       ├── setup.sh          # One-time instance setup script
+│       ├── deploy.sh         # Build & deploy script
+│       ├── nginx.conf        # Nginx reverse proxy config
+│       ├── classsync.service # Systemd service file
+│       └── README.md         # EC2 deployment guide
 ├── docker-compose.yml        # PostgreSQL + backend + angular-frontend
 └── .gitlab-ci.yml            # build + test stages
 ```

@@ -1,0 +1,54 @@
+# =============================================================================
+# ClassSync — Systemd Service File
+#
+# Runs the Spring Boot backend as a managed system service.
+#
+# Installation:
+#   sudo cp /opt/classsync/deployment/ec2/classsync.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable classsync
+#   sudo systemctl start classsync
+#
+# Useful commands:
+#   sudo systemctl status classsync
+#   sudo systemctl restart classsync
+#   sudo journalctl -u classsync -f
+# =============================================================================
+
+[Unit]
+Description=ClassSync Spring Boot Application
+Documentation=https://github.com/your-org/class-sync
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/opt/classsync/backend
+
+# Spring Boot JAR execution
+ExecStart=/usr/bin/java -jar /opt/classsync/backend/target/classync-0.0.1-SNAPSHOT.jar
+
+# Environment variables — UPDATE THESE FOR PRODUCTION
+Environment=SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/classsync
+Environment=SPRING_DATASOURCE_USERNAME=classsync
+Environment=SPRING_DATASOURCE_PASSWORD=changeme
+Environment=SERVER_PORT=8081
+Environment=JWT_SECRET=production-secret-change-this
+
+# Auto-restart on failure
+Restart=on-failure
+RestartSec=10
+
+# Logging to journald
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=classsync
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
