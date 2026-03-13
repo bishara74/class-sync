@@ -14,3 +14,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+jwt:
+  secret: classsync-256-bit-secret-key-change-in-production-env
+  expiration: 86400000

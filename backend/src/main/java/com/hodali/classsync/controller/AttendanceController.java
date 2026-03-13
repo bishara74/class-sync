@@ -8,9 +8,8 @@ import com.hodali.classsync.service.AttendanceService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController // Tells Spring this class handles HTTP requests and returns JSON
-@RequestMapping("/api/attendance") // The base URL for all endpoints in this file
-@CrossOrigin(origins = "*") // Allows our local React app to talk to this local Backend
+@RestController
+@RequestMapping("/api/attendance")
 public class AttendanceController {
 
     private final AttendanceService attendanceService;

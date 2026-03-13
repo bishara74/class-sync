@@ -14,3 +14,8 @@ export interface CheckInRequest {
   studentId: number;
   code: string;
 }
+
+export interface LoginResponse {
+  token: string;
+  user: import('./user.model').User;
+}

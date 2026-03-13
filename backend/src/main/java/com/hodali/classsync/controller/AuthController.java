@@ -1,23 +1,28 @@
 package com.hodali.classsync.controller;
 
 import com.hodali.classsync.dto.LoginRequest;
+import com.hodali.classsync.dto.LoginResponse;
 import com.hodali.classsync.model.User;
 import com.hodali.classsync.model.enums.Role;
 import com.hodali.classsync.repository.UserRepository;
+import com.hodali.classsync.service.JwtService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
 public class AuthController {
 
     private final UserRepository userRepository;
+    private final JwtService jwtService;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public AuthController(UserRepository userRepository) {
+    public AuthController(UserRepository userRepository, JwtService jwtService) {
         this.userRepository = userRepository;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/login")
@@ -29,7 +34,7 @@ public class AuthController {
 
         User user = userOpt.get();
 
-        if (!user.getPassword().equals(request.password())) {
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             return ResponseEntity.badRequest().body("Invalid password.");
         }
 
@@ -39,6 +44,7 @@ public class AuthController {
             }
         }
 
-        return ResponseEntity.ok(user);
+        String token = jwtService.generateToken(user);
+        return ResponseEntity.ok(new LoginResponse(token, user));
     }
 }
