@@ -45,9 +45,11 @@ ClassSync is a modern, full-stack web application designed to streamline classro
 | POST | `/api/attendance/sessions` | Create attendance session | JWT |
 | POST | `/api/attendance/check-in` | Student check-in with 6-digit code | JWT |
 
-## Deployment
+## Live Demo
 
-### Option 1: Local Development (Docker Compose)
+Deployed on AWS EC2: [http://13.60.9.90/](http://13.60.9.90/)
+
+## Local Development
 
 ```bash
 docker-compose up
@@ -58,18 +60,6 @@ This starts PostgreSQL (port 5433), the Spring Boot backend (port 8081), and the
 **Test users seeded automatically:**
 * Teacher: `teacher@school.edu` / `pass123`
 * Student: `student@school.edu` / `pass123` / neptun `ABC123`
-
-### Option 2: AWS EC2
-
-Deploy to a single EC2 instance with Nginx reverse proxy and systemd service management.
-
-```
-Internet → Nginx (port 80)
-              ├── /api/*  → Spring Boot (port 8081) → PostgreSQL (port 5432)
-              └── /*      → Angular static files
-```
-
-See the full guide: [deployment/ec2/README.md](deployment/ec2/README.md)
 
 ## E2E Tests (Selenium)
 

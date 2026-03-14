@@ -8,6 +8,7 @@
 - **Frontend (legacy):** React 19 + Vite + Axios (in `frontend/` directory)
 - **Database:** PostgreSQL 15
 - **DevOps:** Docker + Docker Compose, GitLab CI/CD, Nginx reverse proxy, AWS EC2 deployment (systemd + Nginx)
+- **Live:** [http://13.60.9.90/](http://13.60.9.90/)
 
 ### Key Structure
 ```
