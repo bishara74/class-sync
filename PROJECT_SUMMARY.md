@@ -54,7 +54,7 @@ class-sync/
 - ✅ JWT authentication (jjwt 0.12.6) — tokens returned on login, 24h expiration
 - ✅ `JwtAuthFilter` protects `/api/attendance/**` endpoints — returns 401 for missing/invalid tokens
 - ✅ Angular stores JWT in localStorage, sends via HTTP interceptor (`auth.interceptor.ts`)
-- ✅ CORS restricted to `localhost:4200`, `localhost:5173`, `localhost:3000`
+- ✅ CORS restricted to `localhost:4200`, `localhost:5173`, `localhost:3000`, `13.60.9.90`
 - Role-based route guards on frontend (`authGuard` + `roleGuard`)
 
 ### CI/CD
