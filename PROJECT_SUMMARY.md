@@ -20,6 +20,7 @@ class-sync/
 │       ├── model/            # User, AttendanceSession, AttendanceRecord + enums
 │       ├── dto/              # LoginRequest, LoginResponse, CreateSessionRequest, CheckInRequest
 │       └── repository/       # JPA repositories
+│   └── src/test/java/com/hodali/classsync/e2e/  # Selenium E2E tests
 ├── angular-frontend/         # Angular 21 app (port 4200 dev / 80 Docker)
 │   └── src/app/
 │       ├── pages/            # login, teacher-dashboard, student-dashboard
@@ -64,6 +65,16 @@ class-sync/
 - Auto-seeds test users: teacher `teacher@school.edu`/`pass123`, student `student@school.edu`/`pass123`/neptun `ABC123`
 - Hibernate `ddl-auto: update` auto-generates schema
 - **Note:** If upgrading from plaintext passwords, drop the `users` table so seed data re-runs with hashed passwords
+
+### E2E Tests (Selenium)
+- **12 tests** across 4 test classes using headless Chrome + Selenium WebDriver
+- `LoginE2ETest` (5 tests) — login page load, teacher/student login success, invalid login error, empty field prevention
+- `TeacherFlowE2ETest` (3 tests) — dashboard load, session creation, generated code format
+- `StudentFlowE2ETest` (3 tests) — dashboard load, successful check-in, invalid code error
+- `FullFlowE2ETest` (1 test) — end-to-end: teacher creates session → student checks in → teacher verifies
+- **Shared Chrome instance** via JUnit 5 `TestSuiteExtension` (single browser reused across all test classes)
+- **Login bypass**: tests that need authentication use direct API calls via `executeAsyncScript` + `fetch()` to avoid Angular form binding timing issues; only `LoginE2ETest` exercises the actual login UI
+- Run with: `mvn test -Dtest="com.hodali.classsync.e2e.**"`
 
 ### Known Gaps
 1. ~~Passwords not hashed~~ ✅ Fixed — BCrypt
