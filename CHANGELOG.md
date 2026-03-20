@@ -28,6 +28,7 @@ All notable changes to the ClassSync project will be documented in this file.
   - `log-monitor.sh` — analyzes journalctl logs for errors, warnings, and exceptions
   - `service-restart.sh` — auto-restarts the systemd service with retries (cron-ready)
 - **Makefile** with targets: `up`, `down`, `build`, `test`, `logs`, `healthcheck`, `monitor`, `restart`, `help`
+- **Comprehensive README** covering all DevOps tooling, project structure, architecture, and usage
 
 ### Fixed
 - `.gitignore` was missing entries for the `angular-frontend/` directory (only `frontend/` was covered)
