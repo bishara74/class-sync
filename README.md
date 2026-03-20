@@ -99,7 +99,7 @@ Three jobs across build and test stages:
 
 ### Jenkins Pipeline (`Jenkinsfile`)
 
-Four-stage declarative pipeline designed to run with Docker:
+Five-stage declarative pipeline designed to run with Docker:
 
 | Stage | Description |
 |-------|-------------|
@@ -107,8 +107,9 @@ Four-stage declarative pipeline designed to run with Docker:
 | **Build** | Compiles the Spring Boot JAR using `maven:3.9-eclipse-temurin-17` in Docker |
 | **Test** | Spins up a PostgreSQL 15 container, runs unit tests (Selenium excluded) |
 | **Build Docker Image** | Builds `classsync-backend:{build_number}` and tags as `latest` |
+| **E2E Tests** | Starts the full stack via Docker Compose, runs 12 Selenium tests with headless Chrome |
 
-Post-build: automatically cleans up test containers and prunes dangling Docker images.
+Post-build: automatically cleans up test containers, Docker Compose stack, and prunes dangling Docker images.
 
 ## Ansible
 
