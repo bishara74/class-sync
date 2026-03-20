@@ -1,3 +1,4 @@
+// ClassSync CI/CD Pipeline — Automated via GitHub Webhook
 pipeline {
     agent any
 
