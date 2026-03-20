@@ -34,6 +34,7 @@ ClassSync is a modern, full-stack web application designed to streamline classro
 **DevOps:**
 * Docker + Docker Compose
 * GitLab CI/CD
+* Jenkins CI/CD Pipeline
 * Nginx reverse proxy
 * AWS EC2 deployment (systemd + Nginx)
 
@@ -73,6 +74,23 @@ This starts PostgreSQL (port 5433), the Spring Boot backend (port 8081), and the
 ```bash
 mvn test -Dtest="com.hodali.classsync.e2e.**"
 ```
+
+## CI/CD
+
+### GitLab CI/CD (`.gitlab-ci.yml`)
+Three jobs across build and test stages:
+* **backend-build** — compiles Spring Boot JAR with Maven
+* **backend-test** — runs tests against a PostgreSQL 15 service container
+* **angular-build** — builds the Angular frontend for production
+
+### Jenkins Pipeline (`Jenkinsfile`)
+Four-stage declarative pipeline:
+1. **Checkout** — clones the repo, prints branch and build number
+2. **Build** — compiles the Spring Boot backend JAR (Maven in Docker)
+3. **Test** — runs unit tests against a PostgreSQL 15 container (Selenium E2E tests excluded)
+4. **Build Docker Image** — builds and tags `classsync-backend:{build_number}` and `classsync-backend:latest`
+
+Post-build: automatically cleans up test containers and prunes dangling Docker images.
 
 ## Prerequisites
 
