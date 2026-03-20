@@ -36,6 +36,7 @@ ClassSync is a modern, full-stack web application designed to streamline classro
 * GitLab CI/CD
 * Jenkins CI/CD Pipeline
 * Ansible playbooks for automated provisioning
+* Kubernetes manifests (Minikube-ready)
 * Nginx reverse proxy
 * AWS EC2 deployment (systemd + Nginx)
 
@@ -112,6 +113,22 @@ ansible-playbook -i inventory.ini playbooks/deploy.yml
 Roles: `common` (apt + git), `java` (OpenJDK 17), `postgresql` (PostgreSQL 15 + DB/user), `nginx` (reverse proxy via Jinja2 template), `nodejs` (Node.js 20), `app` (clone, build, deploy).
 
 Configuration: edit `group_vars/all.yml` to set database credentials, repo URL, ports, etc.
+
+### Kubernetes (`k8s/`)
+
+Deploy to a local Minikube cluster:
+
+```bash
+docker build -t classsync-backend:latest ./backend
+minikube image load classsync-backend:latest
+
+kubectl apply -f k8s/namespace.yml
+kubectl apply -f k8s/database/
+kubectl apply -f k8s/backend/
+kubectl get pods -n classsync
+```
+
+Includes: backend Deployment (2 replicas with health probes and resource limits), PostgreSQL StatefulSet (1Gi persistent storage), ConfigMaps, Secrets, and ClusterIP Services. See [`k8s/README.md`](k8s/README.md) for full details.
 
 ## Prerequisites
 

@@ -18,6 +18,11 @@ All notable changes to the ClassSync project will be documented in this file.
   - 6 roles: `common`, `java`, `postgresql`, `nginx`, `nodejs`, `app`
   - Jinja2 templates for Nginx config and systemd service
   - Configurable variables in `group_vars/all.yml`
+- **Kubernetes Manifests** (`k8s/`) for container orchestration:
+  - Namespace, Deployment (2 replicas), StatefulSet, Services, ConfigMaps, Secrets
+  - PostgreSQL StatefulSet with 1Gi persistent storage
+  - Backend with health probes, resource limits, and env from ConfigMap/Secret
+  - Designed for Minikube local testing
 
 ### Fixed
 - `.gitignore` was missing entries for the `angular-frontend/` directory (only `frontend/` was covered)

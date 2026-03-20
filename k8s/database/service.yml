@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  namespace: classsync
+  labels:
+    app: classsync
+    component: database
+spec:
+  type: ClusterIP
+  selector:
+    app: classsync
+    component: database
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: classsync
+  labels:
+    app: classsync
+    component: backend
+data:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-service:5432/classsync
+  SPRING_DATASOURCE_USERNAME: postgres
+  SERVER_PORT: "8081"

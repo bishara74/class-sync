@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: classsync
+  labels:
+    app: classsync
+    component: database
+data:
+  POSTGRES_DB: classsync
+  POSTGRES_USER: postgres
