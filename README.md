@@ -130,6 +130,35 @@ kubectl get pods -n classsync
 
 Includes: backend Deployment (2 replicas with health probes and resource limits), PostgreSQL StatefulSet (1Gi persistent storage), ConfigMaps, Secrets, and ClusterIP Services. See [`k8s/README.md`](k8s/README.md) for full details.
 
+### Operational Scripts (`scripts/`)
+
+| Script | Purpose | Usage |
+|--------|---------|-------|
+| `healthcheck.sh` | Check if API and frontend are alive | `./scripts/healthcheck.sh` |
+| `log-monitor.sh` | Analyze service logs for errors | `./scripts/log-monitor.sh` |
+| `service-restart.sh` | Auto-restart service if down | `./scripts/service-restart.sh` |
+
+All scripts support environment variable overrides (e.g., `API_URL`, `LOG_LINES`, `MAX_RETRIES`). See script headers for details.
+
+**Cron example** (auto-restart every 5 minutes):
+```bash
+*/5 * * * * /opt/classsync/scripts/service-restart.sh >> /var/log/classsync-watchdog.log 2>&1
+```
+
+### Makefile
+
+```bash
+make help          # Show all targets
+make up            # Start services with Docker Compose
+make down          # Stop services and remove volumes
+make build         # Build backend JAR
+make test          # Run backend tests
+make logs          # Follow backend container logs
+make healthcheck   # Run health check
+make monitor       # Monitor service logs
+make restart       # Auto-restart if service is down
+```
+
 ## Prerequisites
 
 To run this project locally, you will need:

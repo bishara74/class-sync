@@ -23,6 +23,11 @@ All notable changes to the ClassSync project will be documented in this file.
   - PostgreSQL StatefulSet with 1Gi persistent storage
   - Backend with health probes, resource limits, and env from ConfigMap/Secret
   - Designed for Minikube local testing
+- **Operational Shell Scripts** (`scripts/`):
+  - `healthcheck.sh` — checks API and frontend liveness with colored output
+  - `log-monitor.sh` — analyzes journalctl logs for errors, warnings, and exceptions
+  - `service-restart.sh` — auto-restarts the systemd service with retries (cron-ready)
+- **Makefile** with targets: `up`, `down`, `build`, `test`, `logs`, `healthcheck`, `monitor`, `restart`, `help`
 
 ### Fixed
 - `.gitignore` was missing entries for the `angular-frontend/` directory (only `frontend/` was covered)
