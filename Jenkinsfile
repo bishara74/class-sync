@@ -73,7 +73,7 @@ pipeline {
         stage('E2E Tests') {
             steps {
                 // Start the full stack (PostgreSQL, Spring Boot, Angular)
-                sh 'docker compose up -d --build'
+                sh 'docker-compose up -d --build'
 
                 // Wait for backend to be ready
                 sh '''
@@ -121,7 +121,7 @@ pipeline {
             }
             post {
                 always {
-                    sh 'docker compose down -v || true'
+                    sh 'docker-compose down -v || true'
                 }
             }
         }
@@ -132,7 +132,7 @@ pipeline {
         always {
             sh 'docker stop classsync-test-db || true'
             sh 'docker rm classsync-test-db || true'
-            sh 'docker compose down -v || true'
+            sh 'docker-compose down -v || true'
             sh 'docker image prune -f'
         }
         success {
