@@ -1,0 +1,21 @@
+# =============================================================================
+# ClassSync — Ansible Variables
+# =============================================================================
+
+app_dir: /opt/classsync
+repo_url: https://github.com/bishara74/class-sync.git
+
+# Database
+db_name: classsync
+db_user: classsync
+db_pass: changeme  # CHANGE THIS in production
+
+# Java
+java_version: "17"
+
+# Node.js
+node_version: "20"
+
+# Spring Boot
+spring_port: 8081
+jwt_secret: production-secret-change-this  # CHANGE THIS in production

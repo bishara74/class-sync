@@ -1,0 +1,41 @@
+# =============================================================================
+# ClassSync — Systemd Service File (managed by Ansible)
+# =============================================================================
+
+[Unit]
+Description=ClassSync Spring Boot Application
+Documentation={{ repo_url }}
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory={{ app_dir }}/backend
+
+# Spring Boot JAR execution
+ExecStart=/usr/bin/java -jar {{ app_dir }}/backend/target/classync-0.0.1-SNAPSHOT.jar
+
+# Environment variables
+Environment=SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/{{ db_name }}
+Environment=SPRING_DATASOURCE_USERNAME={{ db_user }}
+Environment=SPRING_DATASOURCE_PASSWORD={{ db_pass }}
+Environment=SERVER_PORT={{ spring_port }}
+Environment=JWT_SECRET={{ jwt_secret }}
+
+# Auto-restart on failure
+Restart=on-failure
+RestartSec=10
+
+# Logging to journald
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=classsync
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

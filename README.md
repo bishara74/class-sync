@@ -35,6 +35,7 @@ ClassSync is a modern, full-stack web application designed to streamline classro
 * Docker + Docker Compose
 * GitLab CI/CD
 * Jenkins CI/CD Pipeline
+* Ansible playbooks for automated provisioning
 * Nginx reverse proxy
 * AWS EC2 deployment (systemd + Nginx)
 
@@ -91,6 +92,26 @@ Four-stage declarative pipeline:
 4. **Build Docker Image** — builds and tags `classsync-backend:{build_number}` and `classsync-backend:latest`
 
 Post-build: automatically cleans up test containers and prunes dangling Docker images.
+
+### Ansible Playbooks (`ansible/`)
+
+Automated alternative to the manual `setup.sh` and `deploy.sh` scripts.
+
+**Provision a fresh EC2 instance:**
+```bash
+cd ansible
+ansible-playbook -i inventory.ini playbooks/setup.yml
+```
+
+**Deploy the latest code:**
+```bash
+cd ansible
+ansible-playbook -i inventory.ini playbooks/deploy.yml
+```
+
+Roles: `common` (apt + git), `java` (OpenJDK 17), `postgresql` (PostgreSQL 15 + DB/user), `nginx` (reverse proxy via Jinja2 template), `nodejs` (Node.js 20), `app` (clone, build, deploy).
+
+Configuration: edit `group_vars/all.yml` to set database credentials, repo URL, ports, etc.
 
 ## Prerequisites
 

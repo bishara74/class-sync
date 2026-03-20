@@ -1,0 +1,18 @@
+# =============================================================================
+# Role: common — Update system packages and install Git
+# =============================================================================
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Upgrade all system packages
+  ansible.builtin.apt:
+    upgrade: dist
+    autoremove: yes
+
+- name: Install Git
+  ansible.builtin.apt:
+    name: git
+    state: present

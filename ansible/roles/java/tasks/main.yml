@@ -1,0 +1,18 @@
+# =============================================================================
+# Role: java — Install OpenJDK 17
+# =============================================================================
+
+- name: Install OpenJDK {{ java_version }}
+  ansible.builtin.apt:
+    name: "openjdk-{{ java_version }}-jdk"
+    state: present
+    update_cache: yes
+
+- name: Verify Java installation
+  ansible.builtin.command: java -version
+  register: java_version_output
+  changed_when: false
+
+- name: Print Java version
+  ansible.builtin.debug:
+    msg: "{{ java_version_output.stderr }}"

@@ -1,0 +1,19 @@
+# =============================================================================
+# ClassSync — Deployment Playbook
+#
+# Deploys the latest version of ClassSync on a provisioned EC2 instance.
+# Equivalent of deployment/ec2/deploy.sh.
+#
+# Prerequisites:
+#   - setup.yml has been run
+#
+# Usage:
+#   ansible-playbook -i inventory.ini playbooks/deploy.yml
+# =============================================================================
+
+- name: Deploy ClassSync application
+  hosts: classsync
+  become: yes
+
+  roles:
+    - app

@@ -1,0 +1,57 @@
+# =============================================================================
+# ClassSync — Nginx Reverse Proxy Configuration (managed by Ansible)
+#
+# Architecture:
+#   Internet → Nginx (port 80)
+#                ├── /api/*  → Spring Boot (port {{ spring_port }})
+#                └── /*      → Angular static files
+# =============================================================================
+
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name _;
+
+    # ---------------------------------------------------------
+    # Angular static files (SPA)
+    # ---------------------------------------------------------
+    root {{ app_dir }}/angular-frontend/dist/angular-frontend/browser;
+    index index.html;
+
+    location / {
+        # SPA routing — serve index.html for all non-file routes
+        try_files $uri $uri/ /index.html;
+    }
+
+    # ---------------------------------------------------------
+    # API reverse proxy → Spring Boot (port {{ spring_port }})
+    # ---------------------------------------------------------
+    location /api/ {
+        proxy_pass http://localhost:{{ spring_port }};
+
+        # Pass original client information to the backend
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Timeouts for long-running requests
+        proxy_connect_timeout 60s;
+        proxy_send_timeout    60s;
+        proxy_read_timeout    60s;
+    }
+
+    # ---------------------------------------------------------
+    # Security headers
+    # ---------------------------------------------------------
+    add_header X-Frame-Options        "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection       "1; mode=block" always;
+
+    # ---------------------------------------------------------
+    # Logging
+    # ---------------------------------------------------------
+    access_log /var/log/nginx/classsync_access.log;
+    error_log  /var/log/nginx/classsync_error.log;
+}

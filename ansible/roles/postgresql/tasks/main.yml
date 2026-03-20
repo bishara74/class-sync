@@ -1,0 +1,56 @@
+# =============================================================================
+# Role: postgresql — Install PostgreSQL 15, create database and user
+# =============================================================================
+
+- name: Install prerequisite packages for PostgreSQL repo
+  ansible.builtin.apt:
+    name:
+      - wget
+      - gnupg2
+      - python3-psycopg2
+    state: present
+
+- name: Add PostgreSQL APT repository key
+  ansible.builtin.apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state: present
+
+- name: Add PostgreSQL APT repository
+  ansible.builtin.apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt {{ ansible_distribution_release }}-pgdg main"
+    state: present
+    filename: pgdg
+
+- name: Install PostgreSQL 15
+  ansible.builtin.apt:
+    name: postgresql-15
+    state: present
+    update_cache: yes
+
+- name: Ensure PostgreSQL is started and enabled
+  ansible.builtin.service:
+    name: postgresql
+    state: started
+    enabled: yes
+
+- name: Create PostgreSQL user
+  become_user: postgres
+  community.postgresql.postgresql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_pass }}"
+    state: present
+
+- name: Create PostgreSQL database
+  become_user: postgres
+  community.postgresql.postgresql_db:
+    name: "{{ db_name }}"
+    owner: "{{ db_user }}"
+    state: present
+
+- name: Grant all privileges on database to user
+  become_user: postgres
+  community.postgresql.postgresql_privs:
+    database: "{{ db_name }}"
+    privs: ALL
+    type: database
+    role: "{{ db_user }}"

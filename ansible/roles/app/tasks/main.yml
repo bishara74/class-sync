@@ -1,0 +1,97 @@
+# =============================================================================
+# Role: app — Clone repo, build backend + frontend, deploy services
+# =============================================================================
+
+# --- Git ---
+
+- name: Clone or update the ClassSync repository
+  ansible.builtin.git:
+    repo: "{{ repo_url }}"
+    dest: "{{ app_dir }}"
+    version: main
+    force: no
+  become_user: ubuntu
+
+# --- Backend (Spring Boot) ---
+
+- name: Install Maven
+  ansible.builtin.apt:
+    name: maven
+    state: present
+
+- name: Build Spring Boot backend (mvn clean package -DskipTests)
+  ansible.builtin.command: mvn clean package -DskipTests
+  args:
+    chdir: "{{ app_dir }}/backend"
+  become_user: ubuntu
+
+# --- Frontend (Angular) ---
+
+- name: Install Angular frontend dependencies (npm install)
+  ansible.builtin.command: npm install
+  args:
+    chdir: "{{ app_dir }}/angular-frontend"
+  become_user: ubuntu
+
+- name: Build Angular frontend for production
+  ansible.builtin.command: npx ng build --configuration=production
+  args:
+    chdir: "{{ app_dir }}/angular-frontend"
+  become_user: ubuntu
+
+- name: Verify frontend build output exists
+  ansible.builtin.stat:
+    path: "{{ app_dir }}/angular-frontend/dist/angular-frontend/browser"
+  register: frontend_dist
+
+- name: Warn if frontend dist directory is missing
+  ansible.builtin.debug:
+    msg: "WARNING: Frontend build output not found. Check Angular build and update nginx.conf root path if needed."
+  when: not frontend_dist.stat.exists
+
+# --- Nginx config ---
+
+- name: Deploy Nginx configuration
+  ansible.builtin.template:
+    src: ../roles/nginx/templates/nginx.conf.j2
+    dest: /etc/nginx/sites-available/classsync
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Reload Nginx
+
+- name: Validate Nginx configuration
+  ansible.builtin.command: nginx -t
+  changed_when: false
+
+# --- Systemd service ---
+
+- name: Deploy ClassSync systemd service
+  ansible.builtin.template:
+    src: classsync.service.j2
+    dest: /etc/systemd/system/classsync.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart ClassSync
+
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable and start ClassSync service
+  ansible.builtin.service:
+    name: classsync
+    state: started
+    enabled: yes
+
+handlers:
+  - name: Reload Nginx
+    ansible.builtin.service:
+      name: nginx
+      state: reloaded
+
+  - name: Restart ClassSync
+    ansible.builtin.service:
+      name: classsync
+      state: restarted

@@ -1,0 +1,29 @@
+# =============================================================================
+# ClassSync — EC2 Instance Setup Playbook
+#
+# Provisions a fresh Ubuntu 22.04 EC2 instance with all dependencies.
+# Equivalent of deployment/ec2/setup.sh.
+#
+# Usage:
+#   ansible-playbook -i inventory.ini playbooks/setup.yml
+# =============================================================================
+
+- name: Provision ClassSync EC2 instance
+  hosts: classsync
+  become: yes
+
+  roles:
+    - common
+    - java
+    - postgresql
+    - nginx
+    - nodejs
+
+  tasks:
+    - name: Create application directory
+      ansible.builtin.file:
+        path: "{{ app_dir }}"
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: "0755"

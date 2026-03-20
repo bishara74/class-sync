@@ -1,0 +1,28 @@
+# =============================================================================
+# Role: nodejs — Install Node.js 20 via NodeSource
+# =============================================================================
+
+- name: Install prerequisites for NodeSource
+  ansible.builtin.apt:
+    name: curl
+    state: present
+
+- name: Add NodeSource {{ node_version }}.x setup script
+  ansible.builtin.shell: curl -fsSL https://deb.nodesource.com/setup_{{ node_version }}.x | bash -
+  args:
+    creates: /etc/apt/sources.list.d/nodesource.list
+
+- name: Install Node.js
+  ansible.builtin.apt:
+    name: nodejs
+    state: present
+    update_cache: yes
+
+- name: Verify Node.js installation
+  ansible.builtin.command: node -v
+  register: node_version_output
+  changed_when: false
+
+- name: Print Node.js version
+  ansible.builtin.debug:
+    msg: "{{ node_version_output.stdout }}"
